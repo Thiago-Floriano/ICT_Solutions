@@ -895,7 +895,7 @@ Template ICT_Solutions
                         </div>
 
                         <div class="col-lg-5 col-12 mx-auto">
-                            <form class="custom-form contact-form" action="#" method="post" role="form">
+                            <form name="submit-to-google-sheet" class="custom-form contact-form" action="#" method="post" role="form">
                                 <h2>Contact form</h2>
 
                                 <p class="mb-4">Or, you can just send an email:
@@ -910,13 +910,36 @@ Template ICT_Solutions
                                         <input type="text" name="last-name" id="last-name" class="form-control" placeholder="Doe" required>
                                     </div>
                                 </div>
+                               
 
                                 <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Jackdoe@gmail.com" required>
 
                                 <textarea name="message" rows="5" class="form-control" id="message" placeholder="What can we help you?"></textarea>
 
                                 <button type="submit" class="form-control">Send Message</button>
+                                
                             </form>
+                            <span id="msg"></span>
+                                
+                            <script>
+                                const scriptURL = 'https://script.google.com/macros/s/AKfycbzD8Vbb8yZMRoh-56y6m_WLQjVBNXetz_oDftL0cdJcjh_dFwKBNqqkwfZWFd1ZWscgNA/exec'
+                                const form = document.forms['submit-to-google-sheet']
+                                const msg = document.getElementById("msg")
+                              
+                                form.addEventListener('submit', e => {
+                                  e.preventDefault()
+                                  fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                                    .then(response => {
+                                        msg.innerHTML = "Thank you for contact us!"
+                                        setTimeout(function(){
+                                            msg.innerHTML = ""
+                                        },5000)
+                                        form.reset()
+                                    })
+                                    .catch(error => console.error('Error!', error.message))
+                                })
+                              </script>
+                            
                         </div>
 
                     </div>
